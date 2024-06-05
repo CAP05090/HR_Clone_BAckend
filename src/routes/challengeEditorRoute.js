@@ -86,20 +86,14 @@ editorRouter.post('/run', async (req, res) => {
 
 // Route for submitting code
 editorRouter.post('/submit', async (req, res) => {
-    const { code, language, challengeId } = req.body;
-
+    const { code, language, testCases } = req.body;
     try {
-        const testCases = [
-            { input: "home", output: "emoh" },
-            { input: "loohcs", output: "school" },
-        ];
-
         const { allTestsPassed, outputs, expectedOutput } = await runTestCases(code, language, testCases);
 
         if (allTestsPassed) {
-            res.send({ success: true, message: 'All test cases passed!', output: outputs, expected: expectedOutput });
+            res.send({ success: true, message: 'All test cases passed!', got: outputs, expected: expectedOutput });
         } else {
-            res.send({ success: false, message: 'Some test cases failed.', output: outputs, expected: expectedOutput });
+            res.send({ success: false, message: 'Some test cases failed.', got: outputs, expected: expectedOutput });
         }
     } catch (error) {
         res.status(500).send({ error: error.toString() });
